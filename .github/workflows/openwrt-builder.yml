@@ -28,6 +28,7 @@ env:
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
+  Remove_old_Releases: false
   TZ: Asia/Shanghai
 
 jobs:
@@ -155,7 +156,7 @@ jobs:
 
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@v0.3.3
-      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      if: env.UPLOAD_RELEASE == 'true' && env.Remove_old_Releases == 'true' && !cancelled()
       with:
         keep_latest: 3
         delete_tags: true
