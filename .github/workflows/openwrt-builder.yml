@@ -28,7 +28,7 @@ env:
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
-  Remove_old_Releases: false
+  Remove_old_Releases: true
   TZ: Asia/Shanghai
 
 jobs:
@@ -107,7 +107,7 @@ jobs:
 
     - name: Upload bin directory
       uses: actions/upload-artifact@v4
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true' && !cancelled()
       with:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: openwrt/bin
@@ -156,8 +156,7 @@ jobs:
 
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@master
-      #if: env.UPLOAD_RELEASE == 'true' && env.Remove_old_Releases == 'true' && !cancelled()
-      if: env.Remove_old_Releases == 'false' &&  cancelled()
+      if: env.UPLOAD_RELEASE == 'true' && env.Remove_old_Releases == 'true' && !cancelled()     
       with:
         keep_latest: 3
         delete_tags: true
